@@ -1,0 +1,10 @@
+To-Do
+
+- figure out interpreter (start simple so can run programs)
+- finalize grammar for the language with potential additions for std input and output like entering in letters (see brainfuck)
+- figure out ecosystem for standard library (DSLib) - resuable patterns for tasks as "include" files to reduce redundancy and make writing programs easier
+- Create website for language and GitHub repo for the language with interpreter (README links to website)
+- Create slideshow and final video presentation report
+
+Stretch Goals
+- As part of ecosystem, integrate a web playground (drive.live) which is a browser-based, interactive IDE with a live tape visualizer (can be a simple GUI) that animates the car as it moves between cells. Can be used as teaching tool (can vibecode)
