@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveScript Programming Language</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>🚗 DriveScript </h1>
+            <p class="tagline">An Esoteric Programming Language Inspired By Driving Actions</p>
+            <a href="https://github.com/your-username/DriveScript" class="github-button" target="_blank">View on GitHub</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Description Section -->
+        <section class="section description">
+            <h2>What is DriveScript?</h2>
+            <p>
+                DriveScript is an esoteric programming language that blends the syntax of driving commands 
+                with computational logic. Instead of traditional programming constructs, DriveScript uses 
+                driving metaphors—shifting gears, accelerating, and honking—to manipulate memory cells and 
+                produce output.
+            </p>
+            <p>
+                Created as part of SDSU CS 420: Advanced Programming Languages, by mapping driving primitives to a minimal Turing-complete instruction set, 
+                DriveScript demonstrates that real-world physical actions can serve as syntax, which opens the door to some cool applications!
+                Note: DriveScript is not optimized for production coding applications.
+            </p>
+        </section>
+
+        <!-- Overview Section -->
+        <section class="section overview">
+            <h2>How It Works</h2>
+            
+            <h3>Core Concepts</h3>
+            <p>
+                DriveScript operates on an array of memory cells, similar to <a href="https://esolangs.org/wiki/Brainfuck"> Brainfuck</a>. You navigate through 
+                these cells and manipulate their values using driving-themed commands.
+            </p>
+
+            <h3>Basic Syntax</h3>
+            <div class="syntax-guide">
+                <div class="command">
+                    <code>RIGHT</code>
+                    <span>Move the pointer one cell to the right</span>
+                </div>
+                <div class="command">
+                    <code>LEFT</code>
+                    <span>Move the pointer one cell to the left</span>
+                </div>
+                <div class="command">
+                    <code>GAS</code>
+                    <span>Increment the current cell by 1</span>
+                </div>
+                <div class="command">
+                    <code>BRAKE</code>
+                    <span>Decrement the current cell by 1</span>
+                </div>
+                <div class="command">
+                    <code>GEAR N</code>
+                    <span>Repeat next action n times</span>
+                </div>
+                <div class="command">
+                    <code>GEAR R</code>
+                    <span>Invert next action</span>
+                </div>
+                <div class="command">
+                    <code>HONK</code>
+                    <span>Output the ASCII character of the current cell's value</span>
+                </div>
+                <div class="command">
+                    <code>LISTEN</code>
+                    <span>Read a byte from user input into the current cell</span>
+                </div>
+                <div class="command">
+                    <code>PARK ... DRIVE</code>
+                    <span>Loop block: repeat while current cell is non-zero</span>
+                </div>
+            </div>
+
+            <h3>Visual Explanation</h3>
+            <div class="visual-explanation">
+                <p>Here's what's happening as we execute a simple command sequence:</p>
+                <div class="diagram">
+                    <div class="step">
+                        <strong>Step 1: Initial state</strong>
+                        <div class="cells">
+                            <div class="cell pointer">0</div>
+                            <div class="cell">0</div>
+                            <div class="cell">0</div>
+                        </div>
+                        <p class="caption">Pointer at cell 0</p>
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 2: GEAR 5 GAS GAS (cell 0 = 7)</strong>
+                        <div class="cells">
+                            <div class="cell pointer">7</div>
+                            <div class="cell">0</div>
+                            <div class="cell">0</div>
+                        </div>
+                        <p class="caption">Set to 5, then add 2</p>
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 3: RIGHT (move to cell 1)</strong>
+                        <div class="cells">
+                            <div class="cell">7</div>
+                            <div class="cell pointer">0</div>
+                            <div class="cell">0</div>
+                        </div>
+                        <p class="caption">Pointer now at cell 1</p>
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 4: GEAR 3 GAS GAS GAS (cell 1 = 6)</strong>
+                        <div class="cells">
+                            <div class="cell">7</div>
+                            <div class="cell pointer">6</div>
+                            <div class="cell">0</div>
+                        </div>
+                        <p class="caption">Set to 3, then add 3</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Example Section -->
+        <section class="section example">
+            <h2>Example Program</h2>
+            <p>Here's a simple DriveScript program that outputs "Hi":</p>
+            
+            <div class="code-block">
+                <pre><code># Set cell 0 to 72 (ASCII for 'H')
+GEAR 5 GAS GEAR 5 GAS # cell 0 = 10
+
+PARK
+    RIGHT GEAR 5 GAS GAS GAS # cell 1 += 7
+    RIGHT GEAR 5 GAS GEAR 5 GAS # cell 2 += 10
+    GEAR 2 LEFT # go back to counter
+    BRAKE # decrement
+DRIVE
+
+# Set cell 1 to '72' (ascii for 'H'), output, and move to next cell
+RIGHT GAS GAS HONK RIGHT
+# Set cell 2 to '105' (ascii for 'i'), output
+GEAR 5 GAS HONK
+# go back to cell 0
+GEAR 2 LEFT
+</code></pre>
+            </div>
+
+            <div class="output-block">
+                <strong>Output:</strong>
+                <div class="output">Hi</div>
+            </div>
+        </section>
+
+        <!-- Interactive Editor Section -->
+        <section class="section interactive-editor">
+            <h2>Interactive Editor</h2>
+            <p>
+                A browser-based or GUI editor with a live tape visualizer that animates the car as it moves between cells will be added here.
+                This feature is intended to serve as an educational tool for learning DriveScript step by step.
+            </p>
+            <div class="command">
+                <strong>COMING SOON</strong>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2026 DriveScript Language | By Aadi Bery & Aleksandre Zambakhidze </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
