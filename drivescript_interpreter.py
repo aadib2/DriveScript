@@ -7,6 +7,7 @@ def preprocess_includes(code, base_dir, seen=None):
     """Resolve INCLUDE "path" directives recursively. Paths are relative to the
     file currently being processed, then to the stdlib directory next to this
     interpreter. Each file is included at most once per compilation unit."""
+
     if seen is None:
         seen = set()
     stdlib_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'stdlib')
@@ -21,12 +22,14 @@ def preprocess_includes(code, base_dir, seen=None):
                 inc_name = rest[1:-1]
             else:
                 inc_name = rest  # tolerate bare filenames
+
             candidates = [
                 os.path.join(base_dir, inc_name),
                 os.path.join(stdlib_dir, inc_name),
             ]
-            inc_path = next((p for p in candidates if os.path.isfile(p)), None)
-            if inc_path is None:
+
+            inc_path = next((p for p in candidates if os.path.isfile(p)), None) # store the path that exists out of the two candi
+            if inc_path is None: 
                 raise FileNotFoundError(f"INCLUDE could not find {inc_name!r} (looked in {base_dir} and {stdlib_dir})")
             real = os.path.realpath(inc_path)
             if real in seen:
@@ -34,6 +37,8 @@ def preprocess_includes(code, base_dir, seen=None):
             seen.add(real)
             with open(inc_path, 'r') as f:
                 inc_code = f.read()
+            
+            # recursively preprocess any other includes. Append code to out_lines
             expanded = preprocess_includes(inc_code, os.path.dirname(real), seen)
             out_lines.append(f"# >>> begin include: {inc_name}")
             out_lines.append(expanded)
@@ -53,7 +58,7 @@ def run(code, input_stream=None):
             line = line[:line.index('#')]
         cleaned_lines.append(line)
     code = '\n'.join(cleaned_lines)
-    
+
     # Tokenize
     tokens = []
     i = 0
@@ -89,11 +94,11 @@ def run(code, input_stream=None):
             pending_gear = 1
             pending_reverse = False
         j += 1
-    
+
     # Map to brainfuck-like
     bf_map = {'RIGHT':'>', 'LEFT':'<', 'GAS':'+', 'BRAKE':'-', 'HONK':'.', 'LISTEN':',', 'PARK':'[', 'DRIVE':']'}
     bf = ''.join(bf_map[t] for t in tokens) # convert each token to it's brainf equivalent
-    
+
     # Build jump table
     jumps = {}
     stack = []
@@ -104,7 +109,7 @@ def run(code, input_stream=None):
             start = stack.pop()
             jumps[start] = idx
             jumps[idx] = start
-    
+
     tape = [0] * 30000
     ptr = 0
     pc = 0
@@ -138,12 +143,14 @@ def run(code, input_stream=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="DriveScript Interpreter")
     parser.add_argument("file_name", help="Name of .ds file")
+    parser.add_argument("--input", "-i", default=None,
+                        help="Input string for LISTEN. If omitted, LISTEN reads from stdin.")
 
     args = parser.parse_args()
 
     if not args.file_name:
         raise Exception("Include the .ds program file!")
-    
+
     # Read the .ds file, resolve includes, and execute it
     with open(args.file_name, 'r') as f:
         code = f.read()
@@ -151,5 +158,6 @@ if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.abspath(args.file_name))
     code = preprocess_includes(code, base_dir)
 
-    result = run(code)
-    print(result)
+    result = run(code, input_stream=args.input)
+    # Use sys.stdout.write to avoid double-newlines when programs already emit them
+    sys.stdout.write(result)

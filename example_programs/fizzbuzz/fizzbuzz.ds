@@ -1,0 +1,29 @@
+# fizzbuzz.ds - Print FizzBuzz from 1 to 100.
+#
+# Architecture:
+#   1. INCLUDE the init macro, which sets up tape state.
+#   2. Position pointer at C_LOOPCNT (cell 15).
+#   3. PARK (loop while C_LOOPCNT > 0):
+#        Move back to c0, INCLUDE the body (one iteration), move to C_LOOPCNT,
+#        decrement C_LOOPCNT.
+#   4. DRIVE.
+#   5. Move pointer back to c0.
+#
+# The DriveScript INCLUDE mechanism inlines file contents at the include site
+# and skips duplicate inclusions. We INCLUDE the body inside the loop body once,
+# which is exactly what we want.
+
+INCLUDE "fizzbuzz_init.ds"
+
+# Now ptr at c0. Move to C_LOOPCNT (cell 15) and start the loop.
+GEAR 5 RIGHT GEAR 5 RIGHT GEAR 5 RIGHT
+PARK
+    GEAR 5 LEFT GEAR 5 LEFT GEAR 5 LEFT       # back to c0 for the body
+
+    INCLUDE "fizzbuzz_body.ds"
+
+    GEAR 5 RIGHT GEAR 5 RIGHT GEAR 5 RIGHT    # back to C_LOOPCNT
+    BRAKE                                      # decrement loop counter
+DRIVE
+
+GEAR 5 LEFT GEAR 5 LEFT GEAR 5 LEFT           # return to c0 for cleanliness
