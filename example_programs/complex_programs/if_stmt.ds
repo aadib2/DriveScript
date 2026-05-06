@@ -1,0 +1,43 @@
+# In C:
+# x=getchar();
+# if(x == 5){
+# y = 3;
+# print(y)
+# }
+
+# So if you input '5' it should return 3 which is the value of y. If you input another value, it will output nothing.
+
+# x = getchar()
+LISTEN
+
+
+# Copy x from c0 into c2 and c3, clearing c0
+PARK
+  RIGHT RIGHT GAS RIGHT GAS LEFT LEFT LEFT BRAKE
+DRIVE
+
+# Move c3 back into c0
+RIGHT RIGHT RIGHT
+PARK
+  GEAR 3 LEFT GAS GEAR 3 RIGHT BRAKE
+DRIVE
+
+# Set c4 = 1
+RIGHT GAS
+
+# If c2 == 53 ('5' as typed input), this leaves the right cells in the expected state
+LEFT LEFT
+PARK
+  GEAR 53 BRAKE
+  PARK
+    RIGHT
+  DRIVE
+  RIGHT RIGHT
+  PARK
+    GEAR 3 LEFT GEAR 51 GAS HONK  # set y cell to ASCII 51 ('3') and print it
+    GEAR 3 RIGHT
+    PARK
+      BRAKE
+    DRIVE
+  DRIVE
+DRIVE
