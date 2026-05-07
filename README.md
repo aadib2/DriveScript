@@ -7,6 +7,8 @@ DriveScript turns driving actions into code. Instead of traditional keywords, pr
 
 The language is intentionally minimal. Each command operates on a tape of memory cells, and programs usually build behavior by moving the pointer, changing cell values, printing ASCII characters, and looping.
 
+Link to [VIDEO DEMO](https://drive.google.com/file/d/148kP1yK48THWrizJ69zOhCBYA221MLUj/view?usp=sharing)
+
 ## How the Language Works
 
 DriveScript uses a tape of byte-sized cells initialized to zero. The pointer starts at cell 0 and moves across the tape as the program runs.
