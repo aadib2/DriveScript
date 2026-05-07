@@ -1,0 +1,49 @@
+# stdlib/strings.ds
+# Standard string printing routines for DriveScript
+# Cell layout (reserved by convention):
+#   Cell 0  : loop/multiply scratch (zeroed after use)
+#   Cell 1  : primary working cell
+#   Cell 2  : secondary working cell
+#   Cell 3  : tertiary working cell
+
+# PRINT_HELLO
+# Prints "Hello, World!" to output
+# Assumes all cells start at 0
+# Leaves pointer at cell 4 after completion
+
+# Build base values via multiply loop (cell 0 = 10)
+GEAR 5 GAS GEAR 5 GAS       # cell 0 = 10
+PARK
+RIGHT GEAR 5 GAS GAS GAS  # cell 1 += 7  (-> 70 after loop, base for H/e/l/o)
+RIGHT GEAR 5 GAS GEAR 5 GAS # cell 2 += 10 (-> 100, base for e,d,l,o,r)
+RIGHT GEAR 3 GAS           # cell 3 += 3   (scratch)
+GEAR 3 LEFT
+BRAKE
+DRIVE
+
+# Print 'H' (72 = 70 + 2)
+RIGHT GAS GAS HONK
+# Print 'e' (101 = 100 + 1)
+RIGHT GAS HONK
+# Print 'l' (108 = 100 + 8)
+GEAR 5 GAS GAS GAS HONK
+# Print 'l' again
+HONK
+# Print 'o' (111 = 100 + 11)
+GAS GAS GAS HONK
+# Print ',' (44)
+RIGHT GAS GAS HONK
+# Print ' ' (32)
+LEFT LEFT GEAR 5 GAS GEAR 5 GAS GEAR 5 GAS HONK
+# Print 'W' (87)
+RIGHT HONK
+# Print 'o' (111)
+GAS GAS GAS HONK
+# Print 'r' (114)
+GEAR 5 BRAKE BRAKE HONK
+# Print 'l' (108)
+GEAR 5 BRAKE BRAKE BRAKE BRAKE HONK
+# Print 'd' (100)
+RIGHT GAS HONK
+# Print '!' (33)
+GEAR 5 BRAKE GEAR 5 BRAKE GEAR 5 BRAKE GEAR 5 BRAKE BRAKE BRAKE BRAKE HONK
