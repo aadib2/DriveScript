@@ -1,56 +1,94 @@
 # DriveScript
-Source Code for DriveScript Esoteric Programming Language. Created as part of SDSU CS 420: Advanced Programming Languages
+[DriveScript](https://aadib2.github.io/DriveScript/) is an esoteric programming language created as part of SDSU CS 420: Advanced Programming Languages.
 
-Final Project Submission
-1. Complete the implementation of your language. Demonstrate five examples.
+## What Is DriveScript
 
-(a) Write two (3) simple programs using your programming language. Save the files as the proper extension. For instance, if your language is called star, write a program called hello_world.star.
+DriveScript turns driving actions into code. Instead of traditional keywords, programs are written with commands like `RIGHT`, `LEFT`, `GAS`, `BRAKE`, `HONK`, `LISTEN`, `PARK`, and `DRIVE`. The result is a small Brainfuck-like language that feels physical and playful while still being capable of real computation.
 
-b) Implement a simple interpreter that i) parses your language, and b) interprets the language and gives an output  
+The language is intentionally minimal. Each command operates on a tape of memory cells, and programs usually build behavior by moving the pointer, changing cell values, printing ASCII characters, and looping.
 
-c) Write at least one (1) complex additional programs using your programming language.
+## How the Language Works
 
-d) Write one (1) program for your language that runs FizzBuzz.
+DriveScript uses a tape of byte-sized cells initialized to zero. The pointer starts at cell 0 and moves across the tape as the program runs.
 
-e) Run your interpreter against these more complex programs.
+- `RIGHT` moves the pointer one cell to the right.
+- `LEFT` moves the pointer one cell to the left.
+- `GAS` increments the current cell.
+- `BRAKE` decrements the current cell.
+- `HONK` prints the ASCII character in the current cell.
+- `LISTEN` reads one byte of input into the current cell.
+- `GEAR N` repeats the next command `N` times.
+- `GEAR R` reverses the next directional or value-changing command, so `RIGHT` becomes `LEFT` and `GAS` becomes `BRAKE`.
+- `PARK ... DRIVE` creates a loop that repeats while the current cell is non-zero.
 
- 
+Most programs are written by combining these primitives into small reusable patterns for counters, conditionals, and output.
 
-BONUS: Bonus points for creativity.
+## How the Interpreter Works
 
- 
+The interpreter processes a `.ds` file in a few stages:
 
-2. Create a Simple Website for your Language and make sure the Interpreter is uploaded to GitHub
+1. It removes comments and tokenizes the DriveScript words.
+2. It applies `GEAR` repetition and reversal to expand each command into a plain instruction stream.
+3. It maps DriveScript commands to a Brainfuck-style internal representation.
+4. It builds a jump table for every `PARK ... DRIVE` loop before execution starts.
+5. It executes the program against a byte tape and writes any output to standard out.
 
-See: https://lhartikk.github.io/ArnoldCLinks to an external site.
+### Include Resolution
+
+`INCLUDE` is resolved against two paths:
+
+1. The directory of the file currently being processed.
+2. The interpreter’s `stdlib` directory.
+
+For example, if a program contains:
+
+```ds
+INCLUDE "helpers.ds"
+```
+
+the interpreter first looks for `helpers.ds` next to the current file. If it is not found there, it then checks the interpreter’s shared `stdlib` directory.
+
+### Loop Jumps
+
+`PARK` and `DRIVE` are translated to `[` and `]`. The interpreter walks the translated program once, using a stack to match each opening loop with its closing partner (similar to the palindrome problem). That lets it jump instantly when a loop should repeat or exit.
+
+For example, this program:
+
+```ds
+GEAR 3 GAS PARK BRAKE DRIVE
+```
+
+becomes a loop over a cell that starts at `3`:
+
+```text
+++[-]
+```
+
+The loop keeps subtracting until the current cell reaches zero, then execution continues after `DRIVE`.
+
+## Example Program
+
+The `example_programs/` folder contains a few small programs that show different parts of the language in action:
+
+- `simple_programs/hello.ds` and `simple_programs/hello_short.ds` show basic output.
+- `simple_programs/listen_echo.ds` demonstrates input and output.
+- `fizzbuzz/` contains a more complete multi-file example implementing FizzBuzz
+- `complex_programs/if_stmt.ds` and `complex_programs/case_flip.ds` demonstrate branching-style logic.
+
+If you want the quickest starting point, run `example_programs/simple_programs/hello.ds`.
+
+## How to Run DriveScript Programs in the Terminal
+
+Run a program with:
+
+```bash
+python3 run drivescript_interpreter.py path/to/program.ds
+```
+
+If the program needs input for `LISTEN`, pass it with `--input`:
+
+```bash
+python3 run drivescript_interpreter.py example_programs/simple_programs/listen_echo.ds --input "A"
+```
 
 
-Help with Web Dev / Git: https://www.theodinproject.com/Links to an external site. 
-
-Submit the following links...
-
-Live Website Link: ___
-
-Git Source Code Link: 
-
- 
-
-3. Slides Presentation
-
-Create a Slideshow presentation of your work. Your work should include your entire report, as well as all of your examples. Be sure to include:
-
-Programming Language Name
-Programming Language Purpose & Philosophy
-Programming Language Style
-Go over your Language philosophy and why you created it
-Explain your Three (3) programs and explain how they work
-Demonstrate your interpreter running the Six (6) programs
-
-
-
-Claude do the following:
-right now we want to focus on finalizing the interpreter implementation and the sample programs. 
-
-Firstly let's add support for the LISTEN command which allows for user input and reading bytes into cells
-
-Next,  to get entire fizzbuzz working (1 through 100)  - the code would be hundreds of lines long, we want to shorten it by creating some sort of standard library of reusable patterns that could be implemented as "include" files (in CPP). These could include support for multipication, division, modulo and others.
