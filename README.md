@@ -82,13 +82,13 @@ If you want the quickest starting point, run `example_programs/simple_programs/h
 Run a program with:
 
 ```bash
-python3 run drivescript_interpreter.py path/to/program.ds
+python3 drivescript_interpreter.py path/to/program.ds
 ```
 
 If the program needs input for `LISTEN`, pass it with `--input`:
 
 ```bash
-python3 run drivescript_interpreter.py example_programs/simple_programs/listen_echo.ds --input "A"
+python3 drivescript_interpreter.py example_programs/simple_programs/listen_echo.ds --input "A"
 ```
 
 
