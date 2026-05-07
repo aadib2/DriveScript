@@ -18,6 +18,7 @@ def preprocess_includes(code, base_dir, seen=None):
         if upper.startswith('INCLUDE'):
             # Expect: INCLUDE "filename.ds"
             rest = stripped[len('INCLUDE'):].strip()
+            # extract file name (either between quotes or bare)
             if len(rest) >= 2 and rest[0] in ('"', "'") and rest[-1] == rest[0]:
                 inc_name = rest[1:-1]
             else:
@@ -40,11 +41,11 @@ def preprocess_includes(code, base_dir, seen=None):
             
             # recursively preprocess any other includes. Append code to out_lines
             expanded = preprocess_includes(inc_code, os.path.dirname(real), seen)
-            out_lines.append(f"# >>> begin include: {inc_name}")
+            out_lines.append(f"# >>> begin include: {inc_name}") # delimiters
             out_lines.append(expanded)
             out_lines.append(f"# <<< end include: {inc_name}")
         else:
-            out_lines.append(raw)
+            out_lines.append(raw) # if not an includes statement, just append the raw code
     return '\n'.join(out_lines)
 
 

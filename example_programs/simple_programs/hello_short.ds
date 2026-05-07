@@ -1,0 +1,5 @@
+# hello_world.ds
+# Prints "Hello, World!" using the strings.ds stdlib we made!
+# All you need to do is call the INCLUDE!
+
+INCLUDE "strings.ds"
